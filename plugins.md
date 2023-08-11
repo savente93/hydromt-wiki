@@ -1,3 +1,4 @@
+#plugin 
 Currently there are 4 major HydroMT plugins: 
 
 - [[Wflow]]
