@@ -1,0 +1,1 @@
+HydroMT is a [[python]] platform for performing hydrological data pre-processing. It consists of [[HydroMT-Core]] which provides the basis connecting functionality and exposes [[entrypoints]] for [[plugins]] which can extend the functionality for specific workflows as necessary. 
