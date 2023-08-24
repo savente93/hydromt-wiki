@@ -1,0 +1,40 @@
+core: Hydromt Core {
+  catalog: Data Catalog
+  entrypoints: Entrypoints
+  adapters: Data Adapters
+  models: Models
+  catalog -> adapters: provides access
+  models -> entrypoints: is exposed via
+  adapters -> models: constructs
+}
+
+plugins: Plugins {
+  sfincs: Sfincs
+  wflow: Wflow
+  fiat: Delft-FIAT
+  delwaq: Delwaq
+}
+# formats: Formats {
+  # yaml
+  # toml
+  # ini
+# }
+providers
+core.entrypoints -> plugins.sfincs
+core.entrypoints -> plugins.wflow
+core.entrypoints -> plugins.fiat
+core.entrypoints -> plugins.delwaq
+
+core.adapters <- providers
+
+# core.catalog <- formats.yaml
+#
+# core.models <- formats.yaml
+# core.models <- formats.toml
+# core.models <- formats.ini
+#
+# plugins.wflow <- formats.toml
+# plugins.sfincs <- formats.yaml
+# plugins.fiat <- formats.ini
+# plugins.delwaq <- formats.ini
+#
