@@ -3,10 +3,15 @@ user: {
   shape: person
 }
 catalog
+models
+adapters 
+providers
+workflows
 
 user -> catalog: references
 user -> models: provides configuration
 catalog -> adapters: constructs
+
 adapters -> providers: request data
 providers -> adapters: provide data
 adapters -> models: builds
