@@ -1,73 +1,71 @@
 core: Hydromt Core {
-  catalog: Data Catalog
-  # entrypoints: Entrypoints
+  catalog: Data Catalog {
+    yaml
+  }
   adapters: Data Adapters {
     RasterDataset
     Dataframe
     Geodataframe
-    geodataset
+    Geodataset
   }
-  models: Models {
-    grid: GridModel
-    network: NetworkModel
-    lumped: LumpedModel
-    mesh: MeshModel
+  models: Model API {
+    base: Base Model {
+      grid: GridModel
+      network: NetworkModel
+      lumped: LumpedModel
+      mesh: MeshModel
+    }
   }
-  catalog -> adapters: provides access
-  adapters -> models: constructs
+  catalog -> adapters: Constructs
+  adapters -> models: Provides data to
+}
+
+plugins: Plugins {
+  sfincs: Sfincs {
+    text: |md
+      Coastal hydrology
+    |
+  }
+  wflow: Wflow {
+    text: |md
+      Cahcment hydrology
+    |
+  }
+  fiat: FIAT {
+    text: |md
+      Flood impact assessment
+    |
+  }
+  delwaq: Delwaq {
+    text: |md
+      water quality modeling      
+    |
+  }
 }
 
 user: {
   shape: person
 }
 
-user -> core.catalog
-
-plugins: Plugins {
-  sfincs: Sfincs {
-    style: {
-      stroke: red
-    }
-  }
-  wflow: |md
-    // cahcment ydrology
-  |
-  fiat: |md
-    Flood impact assessment
-  |
-  delwaq: Delwaq # water quality modeling
-}
-core.catalog -> providers: references
-# formats: Formats {
-# yaml
-# toml
-# ini
-# }
-providers
-core.models.grid -> plugins.sfincs
-core.models.mesh -> plugins.wflow
-core.models.grid -> plugins.fiat
-core.models.network -> plugins.fiat
-core.models.grid -> plugins.delwaq
-
-core.adapters <- providers
-
-# core.catalog <- formats.yaml
-#
-# core.models <- formats.yaml
-# core.models <- formats.toml
-# core.models <- formats.ini
-#
-# plugins.wflow <- formats.toml
-# plugins.sfincs <- formats.yaml
-# plugins.fiat <- formats.ini
-# plugins.delwaq <- formats.ini
-#
-
-hydrological: {
-  // style: {
-    stroke: red
-  }
+providers: {
+  aws: AWS
+  gcs: GCS
+  p-drive: P drive
 }
 
-2d_flood_modeling
+configs: Model Configuration {
+  yaml
+  toml
+  ini
+}
+
+user -> core.catalog: References
+user -> configs: Writes
+
+core.adapters <-> providers: Exchanges data with
+core.models.base.grid -> plugins.sfincs
+core.models.base -> plugins.wflow
+core.models.base -> plugins.fiat
+core.models.base -> plugins.delwaq
+
+configs -> core.models: Builds
