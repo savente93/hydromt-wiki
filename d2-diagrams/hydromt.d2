@@ -10,10 +10,10 @@ core: Hydromt Core {
   }
   models: Model API {
     base: Base Model {
-      grid: GridModel
       network: NetworkModel
       lumped: LumpedModel
       mesh: MeshModel
+      grid: GridModel
     }
   }
   catalog -> adapters: Constructs
@@ -41,6 +41,11 @@ plugins: Plugins {
       water quality modeling      
     |
   }
+  dflowfmmodel: DFlowFMModel {
+    test: |md
+      ???
+    |
+  }
 }
 
 user: {
@@ -63,9 +68,11 @@ user -> core.catalog: References
 user -> configs: Writes
 
 core.adapters <-> providers: Exchanges data with
-core.models.base.grid -> plugins.sfincs
-core.models.base -> plugins.wflow
-core.models.base -> plugins.fiat
-core.models.base -> plugins.delwaq
+
+plugins.sfincs <- core.models.base.grid
+plugins.wflow <- core.models.base.grid
+plugins.fiat <- core.models.base.grid
+plugins.delwaq <- core.models.base.grid
+plugins.dflowfmmodel <- core.models.base.grid
 
 configs -> core.models: Builds

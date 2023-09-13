@@ -1,6 +1,6 @@
 shape: sequence_diagram
-user{
-	shape:person
+user: {
+  shape: person
 }
 catalog
 
@@ -11,5 +11,3 @@ adapters -> providers: request data
 providers -> adapters: provide data
 adapters -> models: builds
 models -> user: provides model data
-
-
