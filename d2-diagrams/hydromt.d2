@@ -1,29 +1,54 @@
 core: Hydromt Core {
   catalog: Data Catalog
-  entrypoints: Entrypoints
-  adapters: Data Adapters
-  models: Models
+  # entrypoints: Entrypoints
+  adapters: Data Adapters {
+    RasterDataset
+    Dataframe
+    Geodataframe
+    geodataset
+  }
+  models: Models {
+    grid: GridModel
+    network: NetworkModel
+    lumped: LumpedModel
+    mesh: MeshModel
+  }
   catalog -> adapters: provides access
-  models -> entrypoints: is exposed via
   adapters -> models: constructs
 }
 
-plugins: Plugins {
-  sfincs: Sfincs
-  wflow: Wflow
-  fiat: Delft-FIAT
-  delwaq: Delwaq
+user: {
+  shape: person
 }
+
+user -> core.catalog
+
+plugins: Plugins {
+  sfincs: Sfincs {
+    style: {
+      stroke: red
+    }
+  }
+  wflow: |md
+    // cahcment ydrology
+  |
+  fiat: |md
+    Flood impact assessment
+  |
+  delwaq: Delwaq # water quality modeling
+}
+core.catalog -> providers: references
 # formats: Formats {
-  # yaml
-  # toml
-  # ini
+# yaml
+# toml
+# ini
 # }
 providers
-core.entrypoints -> plugins.sfincs
-core.entrypoints -> plugins.wflow
-core.entrypoints -> plugins.fiat
-core.entrypoints -> plugins.delwaq
+core.models.grid -> plugins.sfincs
+core.models.mesh -> plugins.wflow
+core.models.grid -> plugins.fiat
+core.models.network -> plugins.fiat
+core.models.grid -> plugins.delwaq
 
 core.adapters <- providers
 
@@ -38,3 +63,11 @@ core.adapters <- providers
 # plugins.fiat <- formats.ini
 # plugins.delwaq <- formats.ini
 #
+
+hydrological: {
+  // style: {
+    stroke: red
+  }
+}
+
+2d_flood_modeling
